@@ -124,8 +124,9 @@ def extract_products(file_path, page_start, page_end):
         page_number = i + 1
         print(f"Parsing products for page: {page_number} / {len(pages)}")
         page_products = scan_page(page)
+        print(page_products)
 
-        page_products = filter_add_source(page_number, page_products)
+        page_products = filter_add_source(page_number + max(0, page_start-1), page_products)
         products += page_products
 
     print("Getting urls for products")

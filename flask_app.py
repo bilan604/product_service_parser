@@ -52,7 +52,6 @@ def view_uploaded_file(username, filename):
 def index():
     username = request.form["username"]
     password = request.form["password"]
-
     if is_valid_user(username, password) == False:
         return render_template('index.html', success_message="could not validate login credentials")
 
@@ -65,14 +64,23 @@ def index():
     uploaded_file.save(file_path)
     print(f"PDF saved to {file_path}")
 
-    products = extract_products(file_path)
+    page_start = request.form["from_page"]
+    page_stop = request.form["to_page"]
+    if not page_start:
+        page_start = 0
+    else:
+        page_start = int(page_start)
+
+    if not page_stop:
+        page_stop = 99999
+    else:
+        page_stop = int(page_stop)
+
+    products = extract_products(file_path, page_start, page_stop)
 
     print("Saving products locally")
     save_products(uploaded_file.filename, products)
     
-    
-    ###############################
-    ###############################
     enc_username = encrypt(username)
     return redirect(url_for('view_uploaded_file', filename=uploaded_file.filename, username=enc_username))
 
