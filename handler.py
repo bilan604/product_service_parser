@@ -17,12 +17,7 @@ def extract_text_from_pdf(pdf_file_path):
         for page_num in range(len(pdf_reader.pages)):
             page = pdf_reader.pages[page_num]
             page_text = page.extract_text()
-            ##################
-            ##################
-            if page_num == 80:
-                break
-            ##################
-            ##################
+
             pdf_text[page_num] = page_text
 
     return pdf_text
@@ -121,13 +116,9 @@ def filter_add_source(page_num, products):
         new.append(pr)
     return new
 
-def extract_products(file_path):
+def extract_products(file_path, page_start, page_end):
     pages = parse_pdf(file_path)
-    ##################
-    ##################
-    pages = pages[60:80]
-    ##################
-    ##################
+    pages = pages[max(0, page_start-1):min(len(pages), page_end)]
     products = []
     for i, page in enumerate(pages):
         page_number = i + 1
